@@ -18,8 +18,6 @@ for i in range(N):
 
 a.sort(reverse=True)
 
-print(bRank)
-
 answer = 0
 for i in range(N):
     answer += a[bRank[i]] * b[i]
