@@ -26,5 +26,6 @@ for i in range(len(time)):
         else:
             break
 print(answer)
+print(timeLine)
 
 # 사용시간이 짧은 것을 선택할수록 많은 회의를 할 수 있다.
