@@ -1,31 +1,33 @@
-from operator import itemgetter
 import sys
 input = sys.stdin.readline
 
-n = int(input())
-time = []
-endTime = []
-for i in range(n):
-    start, end = map(int, input().split())
-    newtime = [start, end]
-    newtime.append(end - start)
-    endTime.append(end)
-    time.append(newtime)
+N = int(input())
 
-timeLine = [1 for _ in range(max(endTime)+1)]
+time = [[0]*2 for _ in range(N)]
+for i in range(N):
+    s, e = map(int, input().split())
+    time[i][0] = s
+    time[i][1] = e
 
-time = sorted(time, key = itemgetter(2, 0))
+time. sort(key = lambda x : (x[1], x[0]))
 
-answer = 0
-for i in range(len(time)):
-    for j in range(time[i][0]+1, time[i][1]+1):
-        if(timeLine[j]==1):
-            timeLine[j]=0
-            if(j == time[i][1]):
-                answer += 1
-        else:
-            break
-print(answer)
-print(timeLine)
+cnt = 1
+end_time = time[0][1]
+for i in range(1, N):
+    if time[i][0] >= end_time:
+        cnt += 1
+        end_time = time[i][1]
 
+print(cnt)
+
+# 정답
+# 회의가 빨리 끝난 것을 택하고, 회의가 끝나는 시간이 같다면 빨리 시작하는 것을 택한다
+# 예) 2
+#     2 2
+#     1 2
+# 이경우 (2, 2)를 먼저 택하면, (1, 2)의 시작시간이 (2, 2)의 끝나는 시간보다 작아서 택해지지 않음
+
+# 회의 시작시간과 끝나는 시간이 같을 수 있다 => (2, 2)와 같은 case 생각
+
+# 첫 시도
 # 사용시간이 짧은 것을 선택할수록 많은 회의를 할 수 있다.
