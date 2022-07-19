@@ -16,3 +16,5 @@ for c in coin:
         break
     
 print(answer)
+
+# 작은 값의 배수가 큰 수라서 이렇게 풀 수 있음
