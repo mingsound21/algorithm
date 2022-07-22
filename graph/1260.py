@@ -1,42 +1,42 @@
 from collections import deque
-import sys
-input = sys.stdin.readline
-sys.setrecursionlimit(100000)
 
-n, m, v = map(int, input().split())
-graph = [[] for _ in range(n+1)]
-for _ in range(m):
-    a, b = map(int, input().split())
-    graph[a].append(b)
-    graph[b].append(a)
-    
-def dfs(v, visited = [],):
-    visited.append(v)
-    check[v] = True
-    
-    for u in sorted(graph[v]):
-        if not check[u]:
-            dfs(u, visited)
-    return visited
 
-def bfs(v):
-    visited = [v]
-    check[v] = True
-    queue = deque([v])
+
+n, m, start_node = map(int, input().split())
+
+graph = [[] for _ in range(n+2)]
+
+for i in range(m):
+    u, v = map(int, input().split())
+    graph[u].append(v)
+    graph[v].append(u)
+
+visited_dfs = [False for _ in range(n+2)]
+visited_bfs = [False for _ in range(n+2)]
+
+def dfs(graph, v, visited_dfs):
+    visited_dfs[v] = True
+    print(v, end = " ")
+    
+    for i in sorted(graph[v]):
+        if not visited_dfs[i]:
+            dfs(graph, i, visited_dfs)
+
+def bfs(graph, start, visited_bfs):
+    queue = deque([start])
+    
+    visited_bfs[start] = True
+    
     
     while queue:
         v = queue.popleft()
-        for u in sorted(graph[v]):
-            if not check[u]:
-                visited.append(u)
-                queue.append(u)
-                check[u] = True
-    return visited
+        print(v, end = " ")
+        
+        for i in sorted(graph[v]):
+            if not visited_bfs[i]:
+                queue.append(i)
+                visited_bfs[i] = True
 
-check = [False for _ in range(n+1)]
-print(' '.join(map(str, dfs(v))))
-check = [False for _ in range(n+1)]
-print(' '.join(map(str,bfs(v))))
-
-
-
+dfs(graph, start_node, visited_dfs)
+print()
+bfs(graph, start_node, visited_bfs)
