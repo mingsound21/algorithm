@@ -2,46 +2,33 @@ import sys
 input = sys.stdin.readline
 
 dict_alp = {}
-alp_word = []
+digit = [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000]
 
 n = int(input())
 for i in range(n):
     str = input().rstrip()
-    alp_word.append(str)
-    
-    idx = 1
-    
+    idx = 0
     for j in range(len(str)-1, -1, -1):
         alp = str[j]
+        
         if alp in list(dict_alp.keys()):
-            if(dict_alp[alp] < idx):
-                dict_alp[alp] = idx
+            dict_alp[alp] += digit[idx]
         else:
-            dict_alp[alp] = idx
+            dict_alp[alp] = digit[idx]
             
         idx += 1
-
-# print(dict_alp)
 
 dict2 = dict(sorted(dict_alp.items(), key=lambda x : x[1], reverse=True))
 
 num = 9
-for key in list(dict2.keys()):
-    dict2[key] = num
-    num -= 1
-
-# print(dict2)
-    
 answer = 0
-for word in alp_word:
-    sum = 0
-    for j in range(len(word)):
-        sum = sum*10 + dict2[word[j]]
-    answer += sum
-print(answer)
-        
-        
+
+for key, item in list(dict2.items()):
+    answer += num * item
+    num -= 1
     
+print(answer)
+
 # 가장 높은 자릿수의 알파벳일수록 큰 숫자를 할당
 
 # arr에 [알파벳, 위치] 형태로 넣기
@@ -50,4 +37,27 @@ print(answer)
 # 아스키 코드 -> 문자 : chr() 
 # 문자 -> 아스키 코드 : ord()
 
-# 딕셔너리 정렬, key값에 따라, value값에 따라, 오름차순, 내림차순
+
+# 이 풀이는 틀림
+# -> 예외적으로 가장 높은 자릿수의 알파벳에 큰 숫자를 할당했을경우 답이 아닐 수 있음
+# 반례)
+# 10
+# ABB
+# BB
+# BB
+# BB
+# BB
+# BB
+# BB
+# BB
+# BB
+# BB
+
+# 988 + (88 * 9) = 1780
+# 899 + (99 * 9) = 1790
+
+
+# 정답 풀이
+# 그리디) 가장 큰 비율을 차지하는 알파벳에 큰 수를 부여
+
+# ! 그리디) 그 해법이 정당한지 검토 필요 !
