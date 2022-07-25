@@ -1,32 +1,55 @@
 import sys
 input = sys.stdin.readline
+from collections import deque
 
 n = int(input())
 p1, p2 = map(int, input().split())
 m = int(input())
-graph = [0 for _ in range(n+1)]
+graph =[[] for i in range(n+1)]
 for i in range(m):
-    p, c = map(int, input().split())
-    graph[c] = p
+    u, v = map(int, input().split())
+    graph[u].append(v)
+    graph[v].append(u)
+
+# DFS
+visited_dfs = [False for _ in range(n+1)]
+dist_dfs = [0 for _ in range(n+1)]
+def dfs(v):
+    visited_dfs[v] = True
     
-# print(graph) #
+    for i in graph[v]:
+        if not visited_dfs[i]:
+            dist_dfs[i] = dist_dfs[v] + 1
+            dfs(i)
 
-def dfs(v, pArr):
-    pArr.append(v)
-    if graph[v] == 0:
-        return pArr
-    return dfs(graph[v], pArr)
-p1Arr = dfs(p1, [])
-p2Arr = dfs(p2, [])
-
-# print(p1Arr)
-# print(p2Arr)
-
-answer = -1
-for i in range(len(p1Arr)):
-    if p1Arr[i]  in p2Arr:
-        answer = i +  p2Arr.index(p1Arr[i])
-        break
-print(answer)
+# BFS
+dist_bfs = [0 for _ in range(n+1)]
+def bfs(s):
+    visited_bfs = [False for _ in range(n+1)]
     
-# x : 부모, y : 자식
+    
+    queue = deque([s])
+    visited_bfs[s] = True
+    
+    while queue:
+        v = queue.popleft()
+        
+        for i in graph[v]:
+            if not visited_bfs[i]:
+                queue.append(i)
+                visited_bfs[i] = True
+                dist_bfs[i] = dist_bfs[v] + 1
+
+bfs(p1)
+
+if(dist_bfs[p2] != 0):
+    print(dist_bfs[p2])
+else:
+    print(-1)
+    
+
+
+# 풀이 +
+# 나는 트리 구조를 생각해서 푼 것 같음
+# 근데 dfs, bfs를 사용해서 한 정점에서 다른 정점까지 이동한 거리 출력 문제
+# 트리구조로 생각했을 때 풀기 어려우면 그래프 구조도 생각
