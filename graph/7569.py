@@ -2,95 +2,42 @@ import sys
 input = sys.stdin.readline
 from collections import deque
 
-m, n, h = map(int, input().split())
+m, n, h = map(int,input().split()) # mn크기, h상자수
+
 graph = []
-tomato = []
+queue = deque([]) # 아예 처음 부터 queue에 담아서
 
 for i in range(h):
-    arr = []
+    tmp = []
     for j in range(n):
-        arr.append(list(map(int, input().split())))
-    graph.append(arr)
-                
-
-def bfs(tomato):# tomato는 토마토 들어있는 위치가 모두 들어있는 배열
-    queue = deque(tomato)
-    day = []
-    
-    di = [-1, 1, 0, 0, 0, 0]
-    dj = [0, 0, -1, 1, 0, 0]
-    dk = [0, 0, 0, 0, -1, 1]
-
-    while queue:
-        i, j, k = queue.popleft()
-        
-        for a in range(6):
-            ni = i + di[a]
-            nj = j + dj[a]
-            nk = k + dk[a]
-            
-            if ni < 0 or ni >= h or nj < 0 or nj >= n or nk < 0 or nk >= m:
-                continue
-            
-            if graph[ni][nj][nk] == 0 :
-                graph[ni][nj][nk] = graph[i][j][k] + 1
-                day.append(graph[ni][nj][nk])
-                queue.append((ni, nj, nk))
-    if day:
-        maxday = max(day) -1
-    else:
-        maxday = 0
-        
-    return maxday
-
-day = []
-answer = 0
-# 모든 토마토가 처음부터 익은 상태 인지 확인
-for i in range(h):
-    for j in range(n):
+        tmp.append(list(map(int, input().split())))
         for k in range(m):
-            if graph[i][j][k] == 1:
-                tomato.append((i, j, k))
-            if graph[i][j][k] == 0:
-                answer += 1
-                
-# 모든 토마토가 익어있지 않은 경우, bfs해도 토마토 안익은게 있는지 확인        
-if answer != 0:
-    day = bfs(tomato)
+            if tmp[j][k]==1:
+                queue.append([i,j,k]) # 토마토의 모든 위치를 담기
+    graph.append(tmp)
     
-    for i in range(h):
-        for j in range(n):
-            if 0 in graph[i][j]:
-                answer = -1
-                break
-        if answer == -1:
-            break
+dx = [-1,1,0,0,0,0]
+dy = [0,0,1,-1,0,0]
+dz = [0,0,0,0,1,-1]
 
-# 토마토가 처음부터 모두 익어있거나, 안익은 토마토가 마지막에도 있지 않은 경우
-# 걸리는 시간 중에서 가장 오래걸리는 day 출력
-if answer not in (0, -1):
-    answer = day
-
-print(answer)
-
-
-
-# m : 가로, h : 높이, n: 세로
-
-# 틀린 것을 찾을 수 있었던 반례
-'''
-3 3 2
-0 0 1
-0 -1 0
-1 0 0
-0 1 0
--1 0 0
-0 0 0
->>> 맞는 정답 : 3
->>> 내 풀이로 나온 답 : 5
-'''
-# >> 틀린 이유 : 3중 for문 돌면서 1이 나오면 bfs 돌았더니
-# 여러 군데서 퍼지기 시작해서 만날 수도 있다는 것을 간과함
-
-# >> 고치기 : 3중 for문을 bfs 돌기 전에 돌아서 tomato 배열에 tomato 들어있는 위치 모두 담아서
-# >> bfs 매개변수로 tomato 배열을 전달
+while(queue):
+    x,y,z = queue.popleft()
+    
+    for i in range(6):
+        a = x+dx[i]
+        b = y+dy[i]
+        c = z+dz[i]
+        if 0<=a<h and 0<=b<n and 0<=c<m and graph[a][b][c]==0: # 범위 이렇게 쓰면 깔끔
+            queue.append([a,b,c])
+            graph[a][b][c] = graph[x][y][z]+1
+            
+day = 0
+for i in graph:
+    for j in i:
+        for k in j:
+            if k==0: # 하나라도 토마토 안익은거 있으면 -1 출력하고 바로 종료 -- exit(0) 사용
+                print(-1)
+                exit(0)
+        # 처음부터 토마토 모두 익었을 경우를 아래와 같이 처리
+        day = max(day,max(j)) # 토마토가 처음부터 모두 익어있던 경우에는 day = 1
+print(day-1)
