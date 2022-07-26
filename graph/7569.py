@@ -11,10 +11,10 @@ for i in range(h):
     for j in range(n):
         arr.append(list(map(int, input().split())))
     graph.append(arr)
-
                 
-def bfs(tomato):
-    queue = deque([tomato])
+
+def bfs(tomato):# tomato는 토마토 들어있는 위치가 모두 들어있는 배열
+    queue = deque(tomato)
     day = []
     
     di = [-1, 1, 0, 0, 0, 0]
@@ -45,15 +45,19 @@ def bfs(tomato):
 
 day = []
 answer = 0
+# 모든 토마토가 처음부터 익은 상태 인지 확인
 for i in range(h):
     for j in range(n):
         for k in range(m):
             if graph[i][j][k] == 1:
-                day.append(bfs((i, j, k)))
+                tomato.append((i, j, k))
             if graph[i][j][k] == 0:
                 answer += 1
                 
+# 모든 토마토가 익어있지 않은 경우, bfs해도 토마토 안익은게 있는지 확인        
 if answer != 0:
+    day = bfs(tomato)
+    
     for i in range(h):
         for j in range(n):
             if 0 in graph[i][j]:
@@ -62,10 +66,14 @@ if answer != 0:
         if answer == -1:
             break
 
+# 토마토가 처음부터 모두 익어있거나, 안익은 토마토가 마지막에도 있지 않은 경우
+# 걸리는 시간 중에서 가장 오래걸리는 day 출력
 if answer not in (0, -1):
-    answer = max(day)
+    answer = day
 
 print(answer)
+
+
 
 # m : 가로, h : 높이, n: 세로
 
