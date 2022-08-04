@@ -8,6 +8,7 @@ answer = 0
 
 for s in sound:
     idx = duck.find(s)
+    
     if idx == 0:
         cnt[idx] += 1
         continue
