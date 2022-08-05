@@ -6,7 +6,7 @@ file = {}
 
 for _ in range(n):
     data = list(input().rstrip().split("."))
-    if file.get(data[1]) is None:
+    if file.get(data[1]) is None: # data[1] not in file 도 가능
         file[data[1]] = 1
     else:
         file[data[1]] += 1
