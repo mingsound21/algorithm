@@ -42,13 +42,12 @@ for i in range(2, 14):
     if s_stock_graph[i] == 1: # 매수
         S_stock_cnt += (S_money // stock[i])
         S_money %= stock[i]
-        print("S", S_stock_cnt, S_money, i)
     elif s_stock_graph[i] == -1: # 매도
         S_money += S_stock_cnt * stock[i]
         S_stock_cnt = 0
 
 S_total = S_money + S_stock_cnt * stock[-1]
-print(J_total, S_total)
+
 # 결과 출력
 if J_total > S_total:
     print("BNP")
