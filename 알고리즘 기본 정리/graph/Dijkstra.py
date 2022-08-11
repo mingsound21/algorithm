@@ -12,16 +12,17 @@
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # 방법 1) 순차 탐색
+# 시간 복잡도 : O(V^2)
 import sys
 input = sys.stdin.readline
-INF = sys.maxsize
+INF = sys.maxsize # INF = int(1e9) (10억)
 
 n, m = map(int, input().split()) # n : 정점 수, m : 간선 수
 start = int(input())
 
 graph = [[] for _ in range(n+1)]
 visited = [False] * (n+1)
-distance = [INF] * (n+1)
+distance = [INF] * (n+1) # 최단 거리 테이블 모두 무한으로 초기화
 
 for _ in range(m):
     a, b, w = map(int, input().split())
@@ -74,6 +75,8 @@ for i in range(1, n+1):
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # 방법 2) 최소 힙 사용
+# 시간복잡도 : O(ElogV)
+# ** 노드의 개수가 10000개를 넘어가는 문제의 경우 사용해야함
 import heapq
 
 n, m = map(int, input().split())
@@ -98,6 +101,8 @@ def dijkstra_heap(start):
         # visited 리스트를 사용하지 않고 아래의 if문을 사용
         # heapq에 (거리, 노드)순으로 넣다보니, 동일한 노드라도 큐에 저장이 됨
         # 예) queue[(7, 'B'), (10, 'B')]
+        
+        # 현재 노드가 이미 처리된 적 있는 노드라면 무시
         if distance[now] < dist:
             continue
         
