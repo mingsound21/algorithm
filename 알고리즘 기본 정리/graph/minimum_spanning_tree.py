@@ -2,6 +2,7 @@
 
 # 최소 신장 트리 (minimum spanning tree)
 # 주어진 그래프의 모든 정점들을 연결하는 부분 그래프 중에서 가중치의 합이 최소인 트리
+# 문제 예) 모든 도시를 최소 비용으로 연결하는 방법은?
 
 # 1) Kruskal
 # 방법)
@@ -35,36 +36,46 @@
 # 3. 간선들이 이은이 두 정점을 find함수를 통해 root(sRoot, eRoot)를 찾음
 # 4. 두 root가 다르다면 큰 root 값을 작은 root 값으로 만들어 연결되게 함
 # 5. 가중치를 더함
-import heapq
-import sys
-input = sys.stdin.readline
 
-V, E = map(int, input().split())
-Vroot = [i for i in range(V+1)] # root를 저장하는 배열, (root는 연결 요소중 가장 작은 값, 처음에는 자기자신을 저장)
-Elist = [] # 간선들
-for _ in range(E):
-    Elist.append(list(map(int, input().split())))
+def find_parent(parent, x):
+    if parent[x] != x:
+        parent[x] = find_parent(parent, parent[x])
+    return parent[x]
 
-Elist.sort(key = lambda x : x[2]) # 간선 가중치 기준으로 정렬
+def union_parent(parent, a, b):
+    a = find_parent(parent, a)
+    b = find_parent(parent, b)
 
-def find(x):
-    if x != Vroot[x]:
-        Vroot[x] = find(Vroot[x])
-    return Vroot[x]
+    if a < b:
+        parent[b] = a
+    else:
+        parent[a] = b
 
-answer = 0
+v, e = map(int, input().split())
+parent = [0] * (v + 1)
 
-for s, e, w in Elist:
-    sRoot = find(s)
-    eRoot = find(e)
-    if sRoot != eRoot: # 같다면 두 정점은 이미 이어졌음
-        if sRoot > eRoot:
-            Vroot[sRoot] = eRoot
-        else:
-            Vroot[eRoot] = sRoot
-        answer += w
+edges = []
+result = 0
 
-print(answer)
+# 부모 테이블에서, 부모를 자기 자신으로 초기화
+for i in range(1, v + 1):
+    parent[i] = i
+
+for _ in range(e):
+    a, b, cost = map(int, input().split())
+    edges.append((cost, a, b))
+
+edges.sort()
+
+# 간선을 하나씩 확인하며,
+for edge in edges:
+    cost, a, b = edge
+    # 사이클이 발생하지 않는 경우에만 집합에 포함
+    if find_parent(parent, a) != find_parent(parent, b):
+        union_parent(parent, a, b)
+        result += cost
+
+print(result)
 
 # ==============================================================================================================
 # prim
