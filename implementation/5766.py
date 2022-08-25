@@ -30,3 +30,23 @@ while True:
 # sorted(dictionary) : 딕셔너리의 key만 빠져서 리스트
 # sorted(dictionary.items(), key = lambda x : x[1])
 # 내림차순은 sorted(list, reverse=True)
+
+
+# 다른 사람 풀이
+while True:
+    player = [[0, i] for i in range(10001)]
+    n, m = map(int, input().split())
+    if not n and not m:
+        break
+    for _ in range(n):
+        for a in map(int, input().split()):
+            player[a][0] += 1
+    player.sort(key=lambda x : [-x[0], +x[1]]) # 점수는 내림차순, 점수가 같다면 사람 번호는 오름차순으로 정렬
+    second_score = player[1][0]
+    second_place = [player[1][1]]
+    for i in range(2, 10001):
+        if player[i][0] == second_score:
+            second_place.append(player[i][1])
+        else:
+            break
+    print(*second_place) # list안의 모든 값들을 사이사이 공백과 함께 출력
