@@ -1,4 +1,3 @@
-from platform import java_ver
 import sys
 input = sys.stdin.readline
 
