@@ -14,7 +14,6 @@ while True:
         if w == d:
             cnt += 1
         if cnt == t:
-            print('1ok')
             print(num%a)
             exit(0)
         num += 1
@@ -23,7 +22,6 @@ while True:
         if w == 0:
             cnt += 1
         if cnt == t:
-            print('2ok')
             print(num%a)
             exit(0)
         num += 1
@@ -32,7 +30,6 @@ while True:
         if w == 1:
             cnt += 1
         if cnt == t:
-            print('3ok')
             print(num%a)
             exit(0)
         num += 1
