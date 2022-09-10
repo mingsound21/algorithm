@@ -1,0 +1,46 @@
+완전 탐색 알고리즘
+>> 가능한 모든 경우의 수를 다 체크해서 정답 찾자
+
+# 1. brute force
+>> 반복 / 조건문
+
+
+# 2. 순열
+
+
+# 3. 재귀
+>> 예) 숫자 n개 중 m개를 고르는 경우, n과 m의 값이 매우 크면 반복문을 여러개 작성해야함
+>> 재귀함수 사용하면 코드 길이 줄일 수 있음
+>> 예) 1~100 중에서 숫자 5개를 선택하는 경우
+lim = 100
+n = 5
+
+def sample(chosen, curr, cnt):
+    if cnt == n:
+        for i in chosen:
+            print(i, end = "")
+        return
+    
+    for i in range(curr + 1, lim+1):
+        chosen.append(i)
+        sample(chosen, i, cnt + 1)
+
+sample([], 0, 0)
+
+>> 재귀 주의사항
+1. 탈출 조건 필수
+2. 현재 함수의 상태를 저장하는 parameter 필요
+3. return문 신경쓰자
+
+
+# 4. 비트마스크
+>> 비트 연산을 통해서 부분집합 표현
+>> 연산 종류 : &(and), |(or), ~(not), ^(xor), <<, >>(shift)
+>> A << B = A * (2^B)
+>> A >> B = A / (2^B)
+
+# 5. bfs, dfs 사용
+>> 그래프 자료구조에서 모든 정점 탐색
+
+# 참고
+https://hongjw1938.tistory.com/78
