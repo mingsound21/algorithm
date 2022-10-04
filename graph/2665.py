@@ -120,3 +120,65 @@ print(bfs())
 
 # 어려움...
 # 핵심은 queue에서 검은방 최소로 삭제한 루트를 먼저 가도록 유도해서 처음으로 도착 장소에 도착했을 때 삭제한 검은 방의 개수를 출력
+
+
+# --------------------------------------------------------------------------------------------------------------------------------
+# 22.10.04 다시 풀었을 땐 정답
+import sys
+input = sys.stdin.readline
+from collections import deque
+
+n = int(input())
+
+graph = [input().rstrip() for _ in range(n)]
+
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
+
+# try 1 = visited에는 부순 방의 개수를 넣음. 다음 방문에 더 적은 개수의 방을 부쉈다면 update
+def bfs():
+    dq = deque([(0, 0)])
+    visited = [[float('inf')]*n for _ in range(n)]
+    visited[0][0] = 0
+
+    while dq:
+        x, y = dq.popleft()
+
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+
+            if not (0 <= nx < n and 0 <= ny < n):
+                continue
+
+            if graph[nx][ny] == '0':
+                if visited[nx][ny] > visited[x][y] + 1:
+                    visited[nx][ny] = visited[x][y] + 1
+                    dq.append((nx, ny))
+
+            else:
+                if visited[nx][ny] > visited[x][y]:
+                    visited[nx][ny] = visited[x][y]
+                    dq.append((nx, ny))
+
+
+    return visited[n-1][n-1]
+
+print(bfs())
+
+
+# 검은 방 0, 흰 방 1
+# 검은방 = 벽 같은 존재
+# 시작(왼쪽 위)에서 끝방(오른쪽아래)까지 가는 것이 목적
+# 검은방 몇개를 흰방으로 변경해야함 => 최대한 적은 수의 방의 색을 변경
+
+# 궁금한게 언제는 3차원배열을 생성하는지?
+# 궁금한게 언제 visited 했어도 다음 방문에 더 가능한 최솟값이 있을때 변경하는지
+# >> 문제 유형별로 좀 구분을 할 필요성이 있는듯 (아직 구분이 잘 안감)
+
+# 이 문제는 생각했을때 검정색 방을 부수면 먼저 빠르게 도착점에 도달할 수 있지만, 부순 방의 개수가 더 많을 것이라는 것이 예상됨
+# >> 이후에 더 적게 방을 부순 경우가 같은 곳에 방문했을때 값을 update를 해줘야겠구나
+
+# >> 다른 사람 풀이를 확인해보니까 먼저 검은 방보다 흰방을 방문하도록 dq.appendleft((nx, ny))를 수행하면
+# 더 적게 방을 부순 경우에 같은 곳을 방문하는 일이 발생하지 않음.
+# >> 거울 문제도 먼저 빛이 진행하는 방향으로 먼저 쭉 갔던 것처럼 문제의 우선순위에 따라서 방문 순서를 생각해줘야 할 수 있겠다.
